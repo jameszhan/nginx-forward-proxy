@@ -1,8 +1,10 @@
 # nginx-forward-proxy
 
-Nginx forward proxy for https and http
+HTTP/HTTPS Forward Proxy implemented by [NGINX](https://nginx.org/).
 
+## TL;DR
 
 ```bash
-$ docker run --rm -it -p 3128:3128 jameszhan/nginx-forward-proxy:0.0.1
+docker run --name forward-proxy -d -p 3128:3128 jameszhan/nginx-forward-proxy:0.0.2
 ```
+

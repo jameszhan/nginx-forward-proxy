@@ -9,3 +9,8 @@ $ docker run --rm -it --entrypoint bash nginx-forward-proxy:0.0.2
 $ docker tag nginx-forward-proxy:0.0.2 jameszhan/nginx-forward-proxy:0.0.2
 $ docker push jameszhan/nginx-forward-proxy:0.0.2
 ```
+
+```bash
+$ docker tag nginx-forward-proxy:0.0.2 jameszhan/nginx-forward-proxy:0.0.2-arm
+$ docker push jameszhan/nginx-forward-proxy:0.0.2-arm
+```
