@@ -1,6 +1,8 @@
 FROM debian:bullseye-slim
 
-LABEL maintainer="NGINX Docker Maintainers <docker-maint@nginx.com>"
+LABEL maintainer="James Zhan <zhiqiangzhan@gmail.com>"
+
+ARG https_proxy
 
 RUN set -x \
     && addgroup --system --gid 101 nginx \
@@ -22,13 +24,12 @@ RUN set -x \
                         unzip \
                         curl \
                         wget \
-    && apt-get remove --purge --auto-remove -y && rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/nginx.list
-
-RUN mkdir -p /tmp/nginx \
+    && apt-get remove --purge --auto-remove -y && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /tmp/nginx \
     && cd /tmp/nginx \
-    && wget https://github.com/nginx/nginx/archive/refs/tags/release-1.21.6.tar.gz \
-    && wget https://raw.githubusercontent.com/chobits/ngx_http_proxy_connect_module/master/patch/proxy_connect_rewrite_102101.patch \
-    && wget https://github.com/chobits/ngx_http_proxy_connect_module/archive/refs/heads/master.zip \
+    && wget -e "${https_proxy:-use_proxy=off}" https://github.com/nginx/nginx/archive/refs/tags/release-1.21.6.tar.gz \
+    && wget -e "${https_proxy:-use_proxy=off}" https://raw.githubusercontent.com/chobits/ngx_http_proxy_connect_module/master/patch/proxy_connect_rewrite_102101.patch \
+    && wget -e "${https_proxy:-use_proxy=off}" https://github.com/chobits/ngx_http_proxy_connect_module/archive/refs/heads/master.zip \
     && tar -xf release-1.21.6.tar.gz \
     && unzip master.zip \
     && cd /tmp/nginx/nginx-release-1.21.6 \
@@ -72,7 +73,8 @@ RUN mkdir -p /tmp/nginx \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log \
     && mkdir -p /var/cache/nginx \
-    && mkdir /docker-entrypoint.d
+    && mkdir /docker-entrypoint.d \
+    && apt-get remove --purge --auto-remove -y && rm -rf /var/lib/apt/lists/*
 
 COPY nginx.conf /etc/nginx/
 
